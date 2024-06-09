@@ -11,6 +11,13 @@ import (
 
 var db *sql.DB
 
+type Album struct {
+	Title  string
+	Artist string
+	ID     int64
+	Price  float32
+}
+
 func main() {
 	cfg := mysql.Config{
 		User:   os.Getenv("DBUSER"),
@@ -44,13 +51,17 @@ func main() {
     log.Fatal(err)
   }
   fmt.Println("Found album:", album)
-}
 
-type Album struct {
-	Title  string
-	Artist string
-	ID     int64
-	Price  float32
+  newAlbum := Album{
+    Title: "The Modern Sound of Betty Carter",
+    Artist: "Betty Carter",
+    Price: 49.99,
+  }
+  albumId, err := addAlbum(newAlbum)
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Printf("ID of new album: %v", albumId)
 }
 
 func albumsByArtist(name string) ([]Album, error) {
@@ -90,4 +101,18 @@ func albumByID(id int64) (Album, error) {
   }
 
   return album, nil
+}
+
+func addAlbum(album Album) (int64, error) {
+  result, err := db.Exec("INSERT INTO album (title, artist, price) VALUES (?, ?, ?)", album.Title, album.Artist, album.Price)
+  if err != nil {
+    return 0, fmt.Errorf("allAlbum: %v", err)
+  }
+
+  id, err := result.LastInsertId()
+  if err != nil {
+    return 0, fmt.Errorf("addAlbum: %v", err)
+  }
+
+  return id, nil
 }
