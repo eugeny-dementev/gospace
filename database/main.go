@@ -38,6 +38,12 @@ func main() {
     log.Fatal(err)
   }
   fmt.Printf("Albums found %v\n", albums)
+
+  album, err := albumByID(1)
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Println("Found album:", album)
 }
 
 type Album struct {
@@ -58,11 +64,11 @@ func albumsByArtist(name string) ([]Album, error) {
   defer rows.Close()
 
   for rows.Next() {
-    var alb Album
-    if err := rows.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
+    var album Album
+    if err := rows.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
       return nil, fmt.Errorf("albumsByArtist %q, %v", name, err)
     }
-    albums = append(albums, alb)
+    albums = append(albums, album)
   }
 
   if err := rows.Err(); err != nil {
@@ -70,4 +76,18 @@ func albumsByArtist(name string) ([]Album, error) {
   }
 
   return albums, nil
+}
+
+func albumByID(id int64) (Album, error) {
+  var album Album
+
+  row := db.QueryRow("SELECT * FROM album WHERE id = ?", id)
+  if err := row.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
+    if err == sql.ErrNoRows {
+      return album, fmt.Errorf("albumByID %d: no such album", id)
+    }
+    return album, fmt.Errorf("albumByID %d, %v", id, err)
+  }
+
+  return album, nil
 }
