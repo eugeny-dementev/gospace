@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"database/sql"
@@ -33,86 +33,86 @@ func main() {
 		log.Fatal(err)
 	}
 
-  pingErr := db.Ping()
-  if pingErr != nil {
-    log.Fatal(pingErr);
-  }
+	pingErr := db.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
 
-  fmt.Println("Connected", cfg.FormatDSN())
+	fmt.Println("Connected", cfg.FormatDSN())
 
-  albums, err := albumsByArtist("John Coltrane")
-  if err != nil {
-    log.Fatal(err)
-  }
-  fmt.Printf("Albums found %v\n", albums)
+	albums, err := AlbumsByArtist("John Coltrane")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Albums found %v\n", albums)
 
-  album, err := albumByID(1)
-  if err != nil {
-    log.Fatal(err)
-  }
-  fmt.Println("Found album:", album)
+	album, err := AlbumByID(1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Found album:", album)
 
-  newAlbum := Album{
-    Title: "The Modern Sound of Betty Carter",
-    Artist: "Betty Carter",
-    Price: 49.99,
-  }
-  albumId, err := addAlbum(newAlbum)
-  if err != nil {
-    log.Fatal(err)
-  }
-  fmt.Printf("ID of new album: %v", albumId)
+	newAlbum := Album{
+		Title:  "The Modern Sound of Betty Carter",
+		Artist: "Betty Carter",
+		Price:  49.99,
+	}
+	albumId, err := AddAlbum(newAlbum)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("ID of new album: %v", albumId)
 }
 
-func albumsByArtist(name string) ([]Album, error) {
-  var albums []Album
+func AlbumsByArtist(name string) ([]Album, error) {
+	var albums []Album
 
-  rows, err := db.Query("SELECT * FROM album WHERE artist = ?", name)
-  if err != nil {
-    return nil, fmt.Errorf("albumsByArtists %q, %v", name, err)
-  }
+	rows, err := db.Query("SELECT * FROM album WHERE artist = ?", name)
+	if err != nil {
+		return nil, fmt.Errorf("albumsByArtists %q, %v", name, err)
+	}
 
-  defer rows.Close()
+	defer rows.Close()
 
-  for rows.Next() {
-    var album Album
-    if err := rows.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
-      return nil, fmt.Errorf("albumsByArtist %q, %v", name, err)
-    }
-    albums = append(albums, album)
-  }
+	for rows.Next() {
+		var album Album
+		if err := rows.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
+			return nil, fmt.Errorf("albumsByArtist %q, %v", name, err)
+		}
+		albums = append(albums, album)
+	}
 
-  if err := rows.Err(); err != nil {
-    return nil, fmt.Errorf("albumsByArtist %q, %v", name, err)
-  }
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("albumsByArtist %q, %v", name, err)
+	}
 
-  return albums, nil
+	return albums, nil
 }
 
-func albumByID(id int64) (Album, error) {
-  var album Album
+func AlbumByID(id int64) (Album, error) {
+	var album Album
 
-  row := db.QueryRow("SELECT * FROM album WHERE id = ?", id)
-  if err := row.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
-    if err == sql.ErrNoRows {
-      return album, fmt.Errorf("albumByID %d: no such album", id)
-    }
-    return album, fmt.Errorf("albumByID %d, %v", id, err)
-  }
+	row := db.QueryRow("SELECT * FROM album WHERE id = ?", id)
+	if err := row.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
+		if err == sql.ErrNoRows {
+			return album, fmt.Errorf("albumByID %d: no such album", id)
+		}
+		return album, fmt.Errorf("albumByID %d, %v", id, err)
+	}
 
-  return album, nil
+	return album, nil
 }
 
-func addAlbum(album Album) (int64, error) {
-  result, err := db.Exec("INSERT INTO album (title, artist, price) VALUES (?, ?, ?)", album.Title, album.Artist, album.Price)
-  if err != nil {
-    return 0, fmt.Errorf("allAlbum: %v", err)
-  }
+func AddAlbum(album Album) (int64, error) {
+	result, err := db.Exec("INSERT INTO album (title, artist, price) VALUES (?, ?, ?)", album.Title, album.Artist, album.Price)
+	if err != nil {
+		return 0, fmt.Errorf("allAlbum: %v", err)
+	}
 
-  id, err := result.LastInsertId()
-  if err != nil {
-    return 0, fmt.Errorf("addAlbum: %v", err)
-  }
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("addAlbum: %v", err)
+	}
 
-  return id, nil
+	return id, nil
 }
