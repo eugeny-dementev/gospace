@@ -45,6 +45,31 @@ type Album struct {
 	Price  float32
 }
 
+func (c *AlbumsDB) Albums() ([]Album, error) {
+	var albums []Album
+
+	rows, err := c.db.Query("SELECT * FROM album")
+	if err != nil {
+		return nil, fmt.Errorf("albums %v", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var album Album
+		if err := rows.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
+			return nil, fmt.Errorf("albumsByArtist %v", err)
+		}
+		albums = append(albums, album)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("albumsByArtist %v", err)
+	}
+
+	return albums, nil
+}
+
 func (c *AlbumsDB) AlbumsByArtist(name string) ([]Album, error) {
 	var albums []Album
 
