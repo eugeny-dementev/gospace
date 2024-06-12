@@ -52,7 +52,6 @@ func (c *AlbumsDB) Albums() ([]Album, error) {
 	if err != nil {
 		return nil, fmt.Errorf("albums %v", err)
 	}
-
 	defer rows.Close()
 
 	for rows.Next() {
