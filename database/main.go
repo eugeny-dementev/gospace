@@ -47,10 +47,10 @@ type Album struct {
 	Price  float32
 }
 
-func AlbumsByArtist(name string) ([]Album, error) {
+func (c *AlbumsDB) AlbumsByArtist(name string) ([]Album, error) {
 	var albums []Album
 
-	rows, err := db.Query("SELECT * FROM album WHERE artist = ?", name)
+	rows, err := c.db.Query("SELECT * FROM album WHERE artist = ?", name)
 	if err != nil {
 		return nil, fmt.Errorf("albumsByArtists %q, %v", name, err)
 	}
@@ -72,10 +72,10 @@ func AlbumsByArtist(name string) ([]Album, error) {
 	return albums, nil
 }
 
-func AlbumByID(id int64) (Album, error) {
+func (c *AlbumsDB) AlbumByID(id int64) (Album, error) {
 	var album Album
 
-	row := db.QueryRow("SELECT * FROM album WHERE id = ?", id)
+	row := c.db.QueryRow("SELECT * FROM album WHERE id = ?", id)
 	if err := row.Scan(&album.ID, &album.Title, &album.Artist, &album.Price); err != nil {
 		if err == sql.ErrNoRows {
 			return album, fmt.Errorf("albumByID %d: no such album", id)
@@ -86,7 +86,7 @@ func AlbumByID(id int64) (Album, error) {
 	return album, nil
 }
 
-func AddAlbum(album Album) (int64, error) {
+func (c *AlbumsDB) AddAlbum(album Album) (int64, error) {
 	result, err := db.Exec("INSERT INTO album (title, artist, price) VALUES (?, ?, ?)", album.Title, album.Artist, album.Price)
 	if err != nil {
 		return 0, fmt.Errorf("allAlbum: %v", err)
