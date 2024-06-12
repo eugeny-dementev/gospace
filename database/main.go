@@ -11,6 +11,35 @@ import (
 
 var db *sql.DB
 
+type AlbumsDB struct {
+  db *sql.DB
+}
+
+func (c *AlbumsDB) Connect() error {
+	cfg := mysql.Config{
+		User:   os.Getenv("DBUSER"),
+		Passwd: os.Getenv("DBPASS"),
+		Net:    "tcp",
+		Addr:   "127.0.0.1:3306",
+		DBName: "recordings",
+	}
+
+	var err error
+	c.db, err = sql.Open("mysql", cfg.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pingErr := c.db.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
+
+	fmt.Println("Connected", cfg.FormatDSN())
+
+  return nil
+}
+
 type Album struct {
 	Title  string
 	Artist string
