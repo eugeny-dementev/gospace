@@ -1,7 +1,9 @@
 go 1.22.3
 
 use (
+	./api
 	./database
+	./env
 	./example/hello
 	./hello
 )
