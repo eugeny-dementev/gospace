@@ -39,10 +39,10 @@ func (c *AlbumsDB) Connect() error {
 }
 
 type Album struct {
-	Title  string
-	Artist string
-	ID     int64
-	Price  float32
+	Title  string  `json:"title"`
+	Artist string  `json:"artist"`
+	ID     int64   `json:"id"`
+	Price  float32 `json:"price"`
 }
 
 func (c *AlbumsDB) Albums() ([]Album, error) {
