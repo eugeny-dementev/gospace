@@ -9,8 +9,6 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-var db *sql.DB
-
 type AlbumsDB struct {
 	db *sql.DB
 }
@@ -87,7 +85,7 @@ func (c *AlbumsDB) AlbumByID(id int64) (Album, error) {
 }
 
 func (c *AlbumsDB) AddAlbum(album Album) (int64, error) {
-	result, err := db.Exec("INSERT INTO album (title, artist, price) VALUES (?, ?, ?)", album.Title, album.Artist, album.Price)
+	result, err := c.db.Exec("INSERT INTO album (title, artist, price) VALUES (?, ?, ?)", album.Title, album.Artist, album.Price)
 	if err != nil {
 		return 0, fmt.Errorf("allAlbum: %v", err)
 	}
