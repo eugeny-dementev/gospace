@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func handlerFactory(db *database.AlbumsDB) func(c *gin.Context) {
+func getAlbumsFrom(db *database.AlbumsDB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		albums, err := db.Albums()
 		if err != nil {
@@ -20,14 +20,33 @@ func handlerFactory(db *database.AlbumsDB) func(c *gin.Context) {
 	}
 }
 
+func postAlbumTo(db *database.AlbumsDB) func (c *gin.Context) {
+  return func(c *gin.Context) {
+    var newAlbum database.Album
+
+    if err := c.BindJSON(&newAlbum); err != nil {
+      log.Print("Failed to extract album from payload")
+      return;
+    }
+
+    id, err := db.AddAlbum(newAlbum)
+    if err != nil {
+      log.Fatal(err)
+      return
+    }
+    newAlbum.ID = id
+
+    c.IndentedJSON(http.StatusCreated, newAlbum)
+  }
+}
+
 func main() {
 	albumsDB := database.AlbumsDB{}
 	albumsDB.Connect()
 
-	getAlbumsHandler := handlerFactory(&albumsDB)
-
 	router := gin.Default()
-	router.GET("/", getAlbumsHandler)
+	router.GET("/", getAlbumsFrom(&albumsDB))
+  router.POST("/albums", postAlbumTo(&albumsDB))
 
 	router.Run("localhost:8888")
 
