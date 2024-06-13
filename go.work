@@ -5,5 +5,6 @@ use (
 	./database
 	./env
 	./example/hello
+	./fuzz
 	./hello
 )
