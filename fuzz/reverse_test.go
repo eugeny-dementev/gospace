@@ -34,11 +34,11 @@ func FuzzReverse2(f *testing.F) {
 	f.Fuzz(func(t *testing.T, origin string) {
 		rev, err := Reverse(origin)
     if err != nil {
-      return
+      t.Skip()
     }
 		doubleRev, err := Reverse(rev)
     if err != nil {
-      return
+      t.Skip()
     }
 		t.Logf("Number of runes: orig=%d, rev=%d, doubleRev=%d", utf8.RuneCountInString(origin), utf8.RuneCountInString(rev), utf8.RuneCountInString(doubleRev))
 		if origin != doubleRev {
