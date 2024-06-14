@@ -4,6 +4,7 @@ func main() {
 	slicesExp()
 	mapsExp()
   rangeExp()
+  variadicExp()
 }
 
 func clone[T comparable](a []T) []T {
