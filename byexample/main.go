@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"slices"
+	"sort"
 
 	"golang.org/x/exp/constraints"
 )
@@ -27,6 +28,10 @@ func slicesExperiments() {
 	fmt.Println(a, b)
 	a[2] = 3
 	b[2] = 3
+	fmt.Println(a, b, slices.Equal(a, b))
+
+  sort.Ints(a)
+  sort.Ints(b)
 	fmt.Println(a, b, slices.Equal(a, b))
 }
 
