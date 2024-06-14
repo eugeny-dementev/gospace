@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"slices"
 	"sort"
-
-	"golang.org/x/exp/constraints"
 )
 
 func main() {
@@ -35,7 +33,7 @@ func slicesExperiments() {
 	fmt.Println(a, b, slices.Equal(a, b))
 }
 
-func clone[T constraints.Integer](a []T) []T {
+func clone[T comparable](a []T) []T {
 	b := make([]T, len(a))
 	copy(b, a)
 	return b
