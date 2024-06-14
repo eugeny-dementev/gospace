@@ -1,7 +1,7 @@
 package main
 
 func main() {
-	slicesExperiments()
+	slicesExp()
 }
 
 func clone[T comparable](a []T) []T {
