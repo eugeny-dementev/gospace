@@ -6,6 +6,7 @@ func main() {
   rangeExp()
   variadicExp()
   pointerExp()
+  stringsExp()
 }
 
 func clone[T comparable](a []T) []T {
