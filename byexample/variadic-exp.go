@@ -17,4 +17,9 @@ func sum[T constraints.Integer | constraints.Float](numbers ...T) T {
 
 func variadicExp() {
 	fmt.Println("Total:", sum(1, 123, 3, 4, 3, 5))
+
+	var a = make([]int, 100)
+  a[50] = 2
+
+	fmt.Println("Total of slice values:", sum(a...))
 }
