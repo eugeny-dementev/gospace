@@ -25,7 +25,7 @@ func main() {
 
 func Reverse(s string) (string, error) {
 	if !utf8.ValidString(s) {
-		return s, errors.New("Input is not valid UTF-8 string")
+		return s, errors.New("input is not valid UTF-8 string")
 	}
 
 	b := []rune(s)
