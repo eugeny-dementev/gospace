@@ -2,6 +2,7 @@ package main
 
 func main() {
 	slicesExp()
+	mapsExp()
 }
 
 func clone[T comparable](a []T) []T {
