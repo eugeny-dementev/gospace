@@ -7,6 +7,7 @@ func main() {
   variadicExp()
   pointerExp()
   stringsExp()
+  enumsExp()
 }
 
 func clone[T comparable](a []T) []T {
