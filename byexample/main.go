@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
+	"slices"
 
 	"golang.org/x/exp/constraints"
 )
 
 func main() {
-	slices()
+	slicesExperiments()
 }
 
-func slices() {
+func slicesExperiments() {
 	var a []int
 	fmt.Println("uninit:", a, a == nil, len(a))
 
@@ -25,7 +26,8 @@ func slices() {
 	b := clone(a)
 	fmt.Println(a, b)
 	a[2] = 3
-	fmt.Println(a, b)
+	b[2] = 3
+	fmt.Println(a, b, slices.Equal(a, b))
 }
 
 func clone[T constraints.Integer](a []T) []T {
