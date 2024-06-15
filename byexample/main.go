@@ -8,6 +8,7 @@ func main() {
   pointerExp()
   stringsExp()
   enumsExp()
+  structEmbExp()
 }
 
 func clone[T comparable](a []T) []T {
