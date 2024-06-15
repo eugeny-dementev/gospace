@@ -23,5 +23,20 @@ func (serverState ServerState) String() string {
 }
 
 func enumsExp() {
-	fmt.Printf("%s\n", ServerState(StateIdle))
+	fmt.Printf("transition from %s to %s\n", ServerState(StateIdle), stateTransition(StateIdle))
+	fmt.Printf("transition from %s to %s\n", ServerState(StateConnected), stateTransition(StateConnected))
+	fmt.Printf("transition from %s to %s\n", ServerState(StateError), stateTransition(StateError))
+}
+
+func stateTransition(s ServerState) ServerState {
+	switch s {
+	case StateIdle:
+		return StateConnected
+	case StateConnected, StateRetrying:
+		return StateIdle
+	case StateError:
+		return StateError
+	default:
+		panic(fmt.Errorf("unknown state: %s", s))
+	}
 }
