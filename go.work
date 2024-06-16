@@ -3,6 +3,7 @@ go 1.22.3
 use (
 	./api
 	./byexample
+	./crud
 	./database
 	./env
 	./example/hello
