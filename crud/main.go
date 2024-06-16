@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"reflect"
 
 	"github.com/gorilla/mux"
 )
@@ -63,6 +64,25 @@ func main() {
     fmt.Println(movies)
     json.NewEncoder(w).Encode(movie)
 	}).Methods("POST")
+
+	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+		movie := Movie{}
+		json.NewDecoder(r.Body).Decode(&movie)
+    log.Printf("Decoded movie: %v, %v", movie, *movie.Director)
+		params := mux.Vars(r)
+		for _, m := range movies {
+			if m.ID == params["id"] {
+        v := reflect.ValueOf(movie)
+        t := v.Type()
+        for i := 0; i < v.NumField(); i++ {
+          fmt.Printf("Printing something: %v, %v, %v\n", v.Field(i).Interface(), t.Field(i).Name, v.Field(i).Interface() == nil)
+        }
+      }
+    }
+    log.Printf("Updated movie: %v, %v", movie, *movie.Director)
+    json.NewEncoder(w).Encode(movie)
+  }).Methods("PUT")
 
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
