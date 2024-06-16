@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -34,6 +35,8 @@ func GetBookById(w http.ResponseWriter, req *http.Request) {
 	}
 
 	book, _ := models.GetBookById(uint(id))
+
+  fmt.Println("Found book:", book.ID, book.Name)
 
 	res, err := json.Marshal(book)
 	if err != nil {
