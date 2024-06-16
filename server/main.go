@@ -12,39 +12,39 @@ func main() {
 	http.HandleFunc("/form", formHandler)
 	http.HandleFunc("/hello", helloHandler)
 
-  log.Print("Starting server at port 3003")
-  if err := http.ListenAndServe("127.0.0.1:3003", nil); err != nil {
-    log.Fatal(err)
-  }
+	log.Print("Starting server at port 3003")
+	if err := http.ListenAndServe("127.0.0.1:3003", nil); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func formHandler(w http.ResponseWriter, req *http.Request) {
-  log.Printf("Form Handler: method:%v", req.Method)
+	log.Printf("Form Handler: method:%v", req.Method)
 
-  if err := req.ParseForm(); err != nil {
-    fmt.Fprintf(w, "ParseForm err %v", err)
-    return
-  }
-  fmt.Fprintf(w, "POST request successful")
+	if err := req.ParseForm(); err != nil {
+		fmt.Fprintf(w, "ParseForm err %v", err)
+		return
+	}
+	fmt.Fprintf(w, "POST request successful")
 
-  name := req.FormValue("name")
-  address := req.FormValue("address")
+	name := req.FormValue("name")
+	address := req.FormValue("address")
 
-  log.Printf("Name(%v), Address(%v)", name, address)
+	log.Printf("Name(%v), Address(%v)", name, address)
 }
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
-  log.Printf("Hello Handler: method:%v", req.Method)
+	log.Printf("Hello Handler: method:%v", req.Method)
 
-  if req.URL.Path != "/hello" {
-    http.Error(w, "404 Not Found", http.StatusNotFound)
-    return
-  }
+	if req.URL.Path != "/hello" {
+		http.Error(w, "404 Not Found", http.StatusNotFound)
+		return
+	}
 
-  if req.Method != "GET" {
-    http.Error(w, "Method not supported", http.StatusNotFound)
-    return;
-  }
+	if req.Method != "GET" {
+		http.Error(w, "Method not supported", http.StatusNotFound)
+		return
+	}
 
-  fmt.Fprintf(w, "Hello")
+	fmt.Fprintf(w, "Hello")
 }
