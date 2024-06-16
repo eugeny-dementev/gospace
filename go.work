@@ -8,4 +8,5 @@ use (
 	./example/hello
 	./fuzz
 	./hello
+	./server
 )
