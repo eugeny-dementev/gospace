@@ -64,11 +64,11 @@ func CreateBook(w http.ResponseWriter, req *http.Request) {
 func DeleteBookById(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	id, err := strconv.ParseInt(params["bookId"], 0, 0)
-  if err != nil {
-    log.Fatal(err)
-  }
+	if err != nil {
+		log.Fatal(err)
+	}
 
-  book := models.DeleteBook(uint(id))
+	book := models.DeleteBook(uint(id))
 
 	res, err := json.Marshal(book)
 	if err != nil {
