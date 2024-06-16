@@ -18,7 +18,7 @@ type Movie struct {
 }
 
 type Director struct {
-	First string `json:"name"`
+	First string `json:"first"`
 	Last  string `json:"last"`
 }
 
@@ -43,22 +43,27 @@ func main() {
 	}).Methods("GET")
 
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
 		params := mux.Vars(r)
 		for _, m := range movies {
 			if m.ID == params["id"] {
-				w.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(w).Encode(m)
-				break
+				return
 			}
 		}
+    json.NewEncoder(w).Encode(struct{}{})
 	}).Methods("GET")
 
-	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
-		// movie := Movie{}
-		// json.NewDecoder(r.read).Decode(movie)
+	router.HandleFunc("/movies", func(w http.ResponseWriter, r *http.Request) {
+		movie := Movie{}
+		json.NewDecoder(r.Body).Decode(&movie)
+    log.Printf("Decoded movie: %v, %v", movie, *movie.Director)
+    movies = append(movies, movie)
+    fmt.Println(movies)
 	}).Methods("POST")
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {}).Methods("PUT")
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
 		params := mux.Vars(r)
 		for i, m := range movies {
 			if m.ID == params["id"] {
@@ -68,6 +73,7 @@ func main() {
 		}
 		log.Println(movies)
 		log.Printf("Movie deleted %v", params["id"])
+    json.NewEncoder(w).Encode(movies)
 	}).Methods("DELETE")
 
 	fmt.Println("Server started on localhost:3005")
