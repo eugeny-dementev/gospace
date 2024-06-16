@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -38,11 +37,8 @@ func main() {
 	})
 
 	router.HandleFunc("/movies", func(w http.ResponseWriter, req *http.Request) {
-		jsonBuffer, err := json.Marshal(movies)
-		if err != nil {
-			log.Fatal(err)
-		}
-		w.Write(jsonBuffer)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(movies)
 	}).Methods("GET")
 
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
@@ -53,11 +49,8 @@ func main() {
 				movie = m
 			}
 		}
-		jsonBuffer, err := json.Marshal(movie)
-		if err != nil {
-			log.Fatal(err)
-		}
-		w.Write(jsonBuffer)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(movie)
 	}).Methods("GET")
 
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
