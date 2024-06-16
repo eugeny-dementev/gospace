@@ -17,7 +17,7 @@ func Connect() {
 		Passwd: os.Getenv("DBPASS"),
 		Net:    "tcp",
 		Addr:   "127.0.0.1:3306",
-		DBName: "recordings",
+		DBName: "books",
 	}
 
 	database, err := gorm.Open("mysql", cfg.FormatDSN())
