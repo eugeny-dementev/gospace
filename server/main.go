@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -21,4 +22,15 @@ func formHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
+  if req.URL.Path != "/hello" {
+    http.Error(w, "404 Not Found", http.StatusNotFound)
+    return
+  }
+
+  if req.Method != "GET" {
+    http.Error(w, "Method not supported", http.StatusNotFound)
+    return;
+  }
+
+  fmt.Fprintf(w, "Hello")
 }
