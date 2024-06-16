@@ -36,15 +36,22 @@ func GetBookById(w http.ResponseWriter, req *http.Request) {
 
 	book, _ := models.GetBookById(uint(id))
 
-  fmt.Println("Found book:", book.ID, book.Name)
+	fmt.Println("Found book:", book.ID, book.Name)
 
-	res, err := json.Marshal(book)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	var obj any = book
+
+	if book.ID == 0 {
+		obj = struct{}{}
+	}
+
+	res, err := json.Marshal(obj)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
 
