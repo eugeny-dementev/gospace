@@ -13,16 +13,17 @@ var db *gorm.DB
 
 func Connect() {
 	cfg := mysql.Config{
-		User:   os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
-		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "books",
+		User:      os.Getenv("DBUSER"),
+		Passwd:    os.Getenv("DBPASS"),
+		Net:       "tcp",
+		Addr:      "127.0.0.1:3306",
+		DBName:    "books",
+		ParseTime: true,
 	}
 
 	database, err := gorm.Open("mysql", cfg.FormatDSN())
 	if err != nil {
-    log.Fatal(err)
+		log.Fatal(err)
 		panic(err)
 	}
 	db = database
