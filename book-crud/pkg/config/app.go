@@ -22,7 +22,8 @@ func Connect() {
 
 	database, err := gorm.Open("mysql", cfg.FormatDSN())
 	if err != nil {
-		log.Fatal(err)
+    log.Fatal(err)
+		panic(err)
 	}
 	db = database
 
@@ -30,5 +31,5 @@ func Connect() {
 }
 
 func GetDB() *gorm.DB {
-  return db
+	return db
 }
