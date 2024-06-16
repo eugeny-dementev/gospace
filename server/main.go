@@ -32,7 +32,7 @@ func formHandler(w http.ResponseWriter, req *http.Request) {
 
 	log.Printf("Name(%v), Address(%v)", name, address)
 
-  http.Redirect(w, req, "/form.html", http.StatusFound)
+	http.Redirect(w, req, "/form.html", http.StatusFound)
 }
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
