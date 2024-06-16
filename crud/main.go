@@ -46,10 +46,10 @@ func main() {
 	}).Methods("GET")
 
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := "someid"
+		params := mux.Vars(r)
 		var movie Movie
 		for _, m := range movies {
-			if m.ID == id {
+			if m.ID == params["id"] {
 				movie = m
 			}
 		}
