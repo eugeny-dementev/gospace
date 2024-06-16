@@ -78,6 +78,7 @@ func main() {
 				for i := 0; i < v.NumField(); i++ {
 					fmt.Printf("Printing something: %v, %v, %v\n", v.Field(i).Interface(), t.Field(i).Name, v.Field(i).Interface() == nil)
 				}
+        // unfinished endpoint
 			}
 		}
 		log.Printf("Updated movie: %v, %v", movie, *movie.Director)
