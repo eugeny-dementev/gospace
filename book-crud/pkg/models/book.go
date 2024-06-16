@@ -40,7 +40,7 @@ func GetAllBooks() []Book {
 }
 
 func GetBookById(id uint) (*Book, *gorm.DB) {
-	var book Book
+	book := Book{}
 	db := db.Where("ID = ?", id).Find(&book)
 	return &book, db
 }
