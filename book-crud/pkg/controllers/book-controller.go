@@ -57,7 +57,7 @@ func CreateBook(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 	w.Write(res)
 }
 
@@ -69,6 +69,40 @@ func DeleteBookById(w http.ResponseWriter, req *http.Request) {
 	}
 
 	book := models.DeleteBook(uint(id))
+
+	res, err := json.Marshal(book)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(res)
+}
+
+func UpdateBookById(w http.ResponseWriter, req *http.Request) {
+	params := mux.Vars(req)
+	id, err := strconv.ParseInt(params["bookId"], 0, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	update := &models.Book{}
+	utils.ParseBody(req.Body, update)
+
+	book, db := models.GetBookById(uint(id))
+
+	if update.Name != "" {
+		book.Name = update.Name
+	}
+	if update.Author != "" {
+		book.Author = update.Author
+	}
+	if update.Publication != "" {
+		book.Publication = update.Publication
+	}
+
+	db.Save(book)
 
 	res, err := json.Marshal(book)
 	if err != nil {
