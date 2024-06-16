@@ -55,13 +55,15 @@ func main() {
 	}).Methods("GET")
 
 	router.HandleFunc("/movies", func(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
 		movie := Movie{}
 		json.NewDecoder(r.Body).Decode(&movie)
     log.Printf("Decoded movie: %v, %v", movie, *movie.Director)
     movies = append(movies, movie)
     fmt.Println(movies)
+    json.NewEncoder(w).Encode(movie)
 	}).Methods("POST")
-	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {}).Methods("PUT")
+
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 		params := mux.Vars(r)
