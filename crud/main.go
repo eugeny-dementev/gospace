@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -43,14 +44,13 @@ func main() {
 
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
-		var movie Movie
 		for _, m := range movies {
 			if m.ID == params["id"] {
-				movie = m
+				w.Header().Set("Content-Type", "application/json")
+				json.NewEncoder(w).Encode(m)
+				break
 			}
 		}
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(movie)
 	}).Methods("GET")
 
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +58,17 @@ func main() {
 		// json.NewDecoder(r.read).Decode(movie)
 	}).Methods("POST")
 	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {}).Methods("PUT")
-	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {}).Methods("DELETE")
+	router.HandleFunc("/movies/{id}", func(w http.ResponseWriter, r *http.Request) {
+		params := mux.Vars(r)
+		for i, m := range movies {
+			if m.ID == params["id"] {
+				movies = append(movies[:i], movies[i+1:]...)
+				break
+			}
+		}
+		log.Println(movies)
+		log.Printf("Movie deleted %v", params["id"])
+	}).Methods("DELETE")
 
 	fmt.Println("Server started on localhost:3005")
 	http.ListenAndServe("127.0.0.1:3005", router)
