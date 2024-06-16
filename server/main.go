@@ -25,12 +25,14 @@ func formHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "ParseForm err %v", err)
 		return
 	}
-	fmt.Fprintf(w, "POST request successful")
+	log.Printf("POST request successful")
 
 	name := req.FormValue("name")
 	address := req.FormValue("address")
 
 	log.Printf("Name(%v), Address(%v)", name, address)
+
+  http.Redirect(w, req, "/form.html", http.StatusFound)
 }
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
