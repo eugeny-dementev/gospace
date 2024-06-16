@@ -7,13 +7,13 @@ import (
 )
 
 func main() {
-	fileServer := http.FileServer(http.Dir("./static"))
+	fileServer := http.FileServer(http.Dir("./server/static"))
 	http.Handle("/", fileServer)
 	http.HandleFunc("/form", formHandler)
 	http.HandleFunc("/hello", helloHandler)
 
-  log.Print("Starting server at port 8082")
-  if err := http.ListenAndServe(":8082", nil); err != nil {
+  log.Print("Starting server at port 3003")
+  if err := http.ListenAndServe("127.0.0.1:3003", nil); err != nil {
     log.Fatal(err)
   }
 }
@@ -21,6 +21,16 @@ func main() {
 func formHandler(w http.ResponseWriter, req *http.Request) {
   log.Printf("Form Handler: method:%v", req.Method)
 
+  if err := req.ParseForm(); err != nil {
+    fmt.Fprintf(w, "ParseForm err %v", err)
+    return
+  }
+  fmt.Fprintf(w, "POST request successful")
+
+  name := req.FormValue("name")
+  address := req.FormValue("address")
+
+  log.Printf("Name(%v), Address(%v)", name, address)
 }
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
