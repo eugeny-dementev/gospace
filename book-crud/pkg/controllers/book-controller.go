@@ -39,12 +39,14 @@ func GetBookById(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Found book:", book.ID, book.Name)
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 
 	var obj any = book
 
 	if book.ID == 0 {
 		obj = struct{}{}
+		w.WriteHeader(http.StatusNotFound)
+	} else {
+		w.WriteHeader(http.StatusOK)
 	}
 
 	res, err := json.Marshal(obj)
