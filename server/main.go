@@ -19,9 +19,13 @@ func main() {
 }
 
 func formHandler(w http.ResponseWriter, req *http.Request) {
+  log.Printf("Form Handler: method:%v", req.Method)
+
 }
 
 func helloHandler(w http.ResponseWriter, req *http.Request) {
+  log.Printf("Hello Handler: method:%v", req.Method)
+
   if req.URL.Path != "/hello" {
     http.Error(w, "404 Not Found", http.StatusNotFound)
     return
