@@ -10,7 +10,7 @@ type ArgError struct {
 	message string
 }
 
-func (e *ArgError) Error() string {
+func (e ArgError) Error() string {
 	return fmt.Sprintf("%d - %s", e.arg, e.message)
 }
 
