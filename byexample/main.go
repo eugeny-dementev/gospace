@@ -10,6 +10,7 @@ func main() {
   enumsExp()
   structEmbExp()
   genericsExp()
+  errorsExp()
 }
 
 func clone[T comparable](a []T) []T {
