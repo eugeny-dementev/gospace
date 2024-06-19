@@ -25,6 +25,10 @@ func errorsExp() {
 	_, err := f(42)
 	fmt.Println("error:", err)
 	var ae *ArgError
+	fmt.Println("is:", errors.Is(err, ArgError{}))
+	fmt.Println("is:", errors.Is(err, ae))
+	fmt.Println("as:", errors.As(err, &ArgError{}))
+	fmt.Println("as:", errors.As(err, &ae))
 	if errors.As(err, &ae) {
 		fmt.Println(ae.arg)
 		fmt.Println(ae.message)
