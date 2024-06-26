@@ -3,20 +3,33 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"sync"
 	"time"
 )
 
 func goroutinesExp() {
 	fmt.Println("Goroutines experiments")
 
-	gof("direct")
-	go gof("goroutine")
-	go func(msg string) {
-		SleepRand(100)
-		fmt.Println(msg)
-	}("going")
+	var wg sync.WaitGroup
 
-	time.Sleep(time.Second)
+	gof("direct")
+	func() {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			gof("goroutine")
+		}()
+	}()
+	func() {
+		wg.Add(1)
+		go func(msg string) {
+			defer wg.Done()
+			SleepRand(1000)
+			fmt.Println(msg)
+		}("going")
+	}()
+
+	wg.Wait()
 	fmt.Println("done")
 }
 
