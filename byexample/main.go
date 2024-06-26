@@ -11,6 +11,7 @@ func main() {
   structEmbExp()
   genericsExp()
   errorsExp()
+  goroutinesExp()
 }
 
 func clone[T comparable](a []T) []T {
