@@ -17,7 +17,28 @@ func goroutinesExp() {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			gof("goroutine")
+			gof("goroutine 1")
+		}()
+	}()
+	func() {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			gof("goroutine 2")
+		}()
+	}()
+	func() {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			gof("goroutine 3")
+		}()
+	}()
+	func() {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			gof("goroutine 4")
 		}()
 	}()
 	func() {
@@ -35,7 +56,7 @@ func goroutinesExp() {
 
 func gof(from string) {
 	for i := 0; i < 3; i++ {
-		SleepRand(50)
+		SleepRand(1000)
 		fmt.Println(from, ":", i)
 	}
 }
