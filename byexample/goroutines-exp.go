@@ -45,7 +45,7 @@ func goroutinesExp() {
 		wg.Add(1)
 		go func(msg string) {
 			defer wg.Done()
-			SleepRand(1000)
+			SleepRand(10)
 			fmt.Println(msg)
 		}("going")
 	}()
@@ -56,7 +56,7 @@ func goroutinesExp() {
 
 func gof(from string) {
 	for i := 0; i < 3; i++ {
-		SleepRand(1000)
+		SleepRand(10)
 		fmt.Println(from, ":", i)
 	}
 }
