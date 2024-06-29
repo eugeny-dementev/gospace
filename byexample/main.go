@@ -12,6 +12,7 @@ func main() {
   genericsExp()
   errorsExp()
   goroutinesExp()
+  channelsExp()
 }
 
 func clone[T comparable](a []T) []T {
