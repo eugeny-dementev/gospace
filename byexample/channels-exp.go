@@ -31,6 +31,8 @@ func channelsExp() {
 		}
 	}
 	fmt.Println("All workers finished", len(doneList))
+
+	anyChannelRead()
 }
 
 func worker(id int, done chan<- bool) {
@@ -39,4 +41,27 @@ func worker(id int, done chan<- bool) {
 	fmt.Printf("worker %d is done\n", id)
 
 	done <- true
+}
+
+func anyChannelRead() {
+	c1 := make(chan string)
+	c2 := make(chan string)
+
+	go func(c chan<- string) {
+		time.Sleep(time.Millisecond * 20)
+		c <- "one"
+	}(c1)
+	go func(c chan<- string) {
+		time.Sleep(time.Millisecond * 10)
+		c <- "two"
+	}(c2)
+
+	for range 2 {
+		select {
+		case msg1 := <-c1:
+			fmt.Println("Message received from c1", msg1)
+		case msg2 := <-c2:
+			fmt.Println("Message received from c2", msg2)
+		}
+	}
 }
