@@ -33,7 +33,7 @@ func channelsExp() {
 	fmt.Println("All workers finished", len(doneList))
 }
 
-func worker(id int, done chan bool) {
+func worker(id int, done chan<- bool) {
 	fmt.Printf("worker %d is working\n", id)
 	time.Sleep(time.Millisecond * 10)
 	fmt.Printf("worker %d is done\n", id)
