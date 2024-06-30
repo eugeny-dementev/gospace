@@ -34,6 +34,7 @@ func channelsExp() {
 
 	anyChannelRead()
 	timeouts()
+	nonBlocking()
 }
 
 func worker(id int, done chan<- bool) {
@@ -79,5 +80,34 @@ func timeouts() {
 		fmt.Println("Non blocking", res)
 	case <-time.After(time.Millisecond * 10):
 		fmt.Println("timeout 1")
+	}
+}
+
+func nonBlocking() {
+	messages := make(chan string)
+	signals := make(chan bool)
+
+	select {
+	case msg := <-messages:
+		fmt.Println("Message received", msg)
+	default:
+		fmt.Println("No messages received")
+	}
+
+	msg := "hi"
+	select {
+	case messages <- msg:
+		fmt.Println("Sent message", msg)
+	default:
+		fmt.Println("No messages sent")
+	}
+
+	select {
+	case msg := <-messages:
+		fmt.Println("Received message", msg)
+	case sig := <-signals:
+		fmt.Println("Received signal", sig)
+	default:
+		fmt.Println("No activity")
 	}
 }
