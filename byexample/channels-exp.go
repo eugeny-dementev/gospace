@@ -33,7 +33,7 @@ func channelsExp() {
 	fmt.Println("All workers finished", len(doneList))
 
 	anyChannelRead()
-  timeouts()
+	timeouts()
 }
 
 func worker(id int, done chan<- bool) {
@@ -70,14 +70,14 @@ func anyChannelRead() {
 func timeouts() {
 	c1 := make(chan string)
 	go func() {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Millisecond * 20)
 		c1 <- "result 1"
 	}()
 
 	select { // Promise.race basically
 	case res := <-c1:
 		fmt.Println("Non blocking", res)
-	case <-time.After(time.Second):
+	case <-time.After(time.Millisecond * 10):
 		fmt.Println("timeout 1")
 	}
 }
