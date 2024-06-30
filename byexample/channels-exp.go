@@ -33,7 +33,7 @@ func channelsExp() {
 	fmt.Println("All workers finished", len(doneList))
 
 	anyChannelRead()
-  nonBlocking()
+  timeouts()
 }
 
 func worker(id int, done chan<- bool) {
@@ -67,7 +67,7 @@ func anyChannelRead() {
 	}
 }
 
-func nonBlocking() {
+func timeouts() {
 	c1 := make(chan string)
 	go func() {
 		time.Sleep(time.Second * 2)
