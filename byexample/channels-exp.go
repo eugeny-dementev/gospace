@@ -34,7 +34,7 @@ func channelsExp() {
 
 	anyChannelRead()
 	timeouts()
-  nonBlocking()
+	nonBlocking()
 }
 
 func worker(id int, done chan<- bool) {
