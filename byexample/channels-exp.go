@@ -35,6 +35,7 @@ func channelsExp() {
 	anyChannelRead()
 	timeouts()
 	nonBlocking()
+	blocking()
 }
 
 func worker(id int, done chan<- bool) {
@@ -110,4 +111,14 @@ func nonBlocking() {
 	default:
 		fmt.Println("No activity")
 	}
+}
+
+func blocking() {
+	messages := make(chan string, 1) // 2. But if channel is buffered the panic will not happen and sent to channel would be immediately unblocked
+
+	msg := "Hello"
+	messages <- msg // 1. This will panic because channel is non-buffered and no receive setup before sent to the channel
+
+	receivedMsg := <-messages
+	fmt.Println("Received message:", receivedMsg)
 }
