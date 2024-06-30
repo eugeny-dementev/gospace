@@ -34,7 +34,7 @@ func channelsExp() {
 
 	anyChannelRead()
 	timeouts()
-	nonBlocking()
+  nonBlocking()
 }
 
 func worker(id int, done chan<- bool) {
@@ -84,7 +84,7 @@ func timeouts() {
 }
 
 func nonBlocking() {
-	messages := make(chan string)
+	messages := make(chan string, 1)
 	signals := make(chan bool)
 
 	select {
@@ -96,7 +96,7 @@ func nonBlocking() {
 
 	msg := "hi"
 	select {
-	case messages <- msg:
+	case messages <- msg: // message cannot be sent if channel is non-buffered
 		fmt.Println("Sent message", msg)
 	default:
 		fmt.Println("No messages sent")
