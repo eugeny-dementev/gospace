@@ -8,7 +8,7 @@ import (
 func main() {
 	cmd := exec.Command("cat", "./ffmpeg/main.go")
 
-	fmt.Println("cmd", cmd)
+	fmt.Println("cmd", cmd, cmd.Args)
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
