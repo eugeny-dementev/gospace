@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	cmd := exec.Command("cat", "./ffmpeg/main.go")
+	cmd := exec.Command("cat")
+  cmd.Args = append(cmd.Args, "./ffmpeg/main.go")
 
 	fmt.Println("cmd", cmd, cmd.Args)
 
