@@ -6,8 +6,14 @@ import (
 )
 
 func main() {
-	cmd := exec.Command("cat")
-  cmd.Args = append(cmd.Args, "./ffmpeg/main.go")
+	cmd := exec.Command("ffmpeg")
+  // ffmpeg -t "00:00:05" -i "rtsp://admin:password@192.168.88.111:554/ISAPI/Streaming/Channels/101" "./room.mp4"
+	cmd.Args = append(
+		cmd.Args,
+    "-t", "00:00:05",
+    "-i", "rtsp://admin:password@192.168.1.111:554/ISAPI/Streaming/Channels/101",
+    "./room.mp4",
+	)
 
 	fmt.Println("cmd", cmd, cmd.Args)
 
@@ -16,5 +22,5 @@ func main() {
 		panic(err)
 	}
 
-  fmt.Println("Output:", string(out))
+	fmt.Println("Output:", string(out))
 }
